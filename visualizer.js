@@ -22,7 +22,7 @@ AUDIO.VISUALIZER = (function () {
         loop,
         autoplay,
         timer,
-        radiusPercent,
+        circumferenceSlice,
         radius,
         style,
         barWidth,
@@ -47,10 +47,9 @@ AUDIO.VISUALIZER = (function () {
         this.sourceNode = null;
         this.timer = timer || false;
         this.frequencyData = [];
-        this.radiusPercent = radiusPercent || 0  // 0.0 - 1.0
+        this.circumferenceSlice = circumferenceSlice || 0  // 0.0 - 1.0
         this.audioSrc = null;
         this.duration = 0;
-        this.radius = radius || 200,
         this.minutes = '00';
         this.seconds = '00';
         this.style = style || 'lounge';
@@ -324,11 +323,13 @@ AUDIO.VISUALIZER = (function () {
         var cx = this.canvas.width / 2;
         var cy = this.canvas.height / 2;
         var radius = this.radius
+        var circumferenceSlice = this.circumferenceSlice
+        console.log(circumferenceSlice)
         var maxBarNum = Math.floor((radius * 2 * Math.PI) / (this.barWidth + this.barSpacing));
-        var slicedPercent = Math.floor(maxBarNum * 0.0);
+        var slicedPercent = Math.floor(maxBarNum * circumferenceSlice);
         var barNum = maxBarNum - slicedPercent;
         var freqJump = Math.floor(this.frequencyData.length / maxBarNum);
-        console.log(this.frequencyData[0])
+        // console.log(this.frequencyData[0])
 
         for (var i = 0; i < barNum; i++) {
             var amplitude = this.frequencyData[i * freqJump] * 3;
@@ -357,6 +358,8 @@ AUDIO.VISUALIZER = (function () {
      *     loop: <Bool>,
      *     audio: <String>,
      *     canvas: <String>,
+     *     circumferenceSlice: <Float>,
+     *     radius: <Integer>,
      *     style: <String>,
      *     barWidth: <Integer>,
      *     barHeight: <Integer>,
@@ -397,6 +400,7 @@ AUDIO.VISUALIZER = (function () {
     function getInstance (cfg) {
         return _createVisualizer(cfg)();
     }
+
 
     /**
      * @description

@@ -1,9 +1,5 @@
 ## Audio Visualizer
-Vanilla JS
-
-IMPORTANT: Please don't use this code out of the box (copy & paste) in production without testing it. It's been quite some time since I wrote this, and it's been written only as an `example` code, which you'll probably need to modify for your project's needs. Many things have changed, both in JavaScript rules and browser / mobile security rules.
-
-Purpose of this code is to serve as a `guideline` to start using Web Audio API.
+A minimalistic audio visualizer
 
 
 #### Description:
@@ -12,11 +8,6 @@ Web Audio experiment for audio visualization on canvas.
 
 ![visualizer](/screenshots/visualizer.png "visualizer")
 
-### Install via bower
-
-````shell
-$bower install --save-dev audio-visualizer
-````
 
 #### Usage
 
@@ -26,19 +17,44 @@ Include visualizer script in your index.html
     <script src="visualizer.js"></script>
 ````
 
-Include `audio` and `canvas` HTML elements.
+Include `audio` and `canvas` HTML elements with a click event to initialize the visualizer. the click event is neccessary to play audio - otherwise chrome or firefox will block it.
 ````html
     <div>
         <audio id="myAudio" src="path/to/source/audio/" data-author="insert/author/name" data-title="insert/audio/name"></audio>
-        <canvas id="myCanvas" width="800" height="400"></canvas>
+        <canvas onclick="initVisualizer()" id="myCanvas" width="800" height="800"></canvas>
     </div>
 ````
+
+include script for handling the initilization event
+````js
+let AV;
+        
+function initVisualizer() {
+    if(!AV) {
+        AV = AUDIO.VISUALIZER.getInstance({
+            autoplay: false,
+            loop: true,
+            audio: 'myAudio',
+            canvas: 'myCanvas',
+            style: 'lounge',
+            barWidth: 2,
+            barHeight: 2,
+            barSpacing: 7,
+            barColor: '#cafdff',
+            shadowBlur: 20,
+            shadowColor: '#ffffff',
+            font: ['12px', 'Helvetica']
+        });
+    }
+}
+````
+
 **Note**: For visualizer to render audio and author names you'll have to set `data-author` and `data-title` attributes on your audio element.
 
 
 Create Visualizer instance.
 
-````shell
+````js
     AUDIO.VISUALIZER.getInstance({
         audio: 'myAudio',
         canvas: 'myCanvas',
@@ -47,80 +63,26 @@ Create Visualizer instance.
 
 #### Options
 
-**audio** (String) (required)
+| option | type | required | default | description |
+| ------ | ---- | -------- | ------- | ----------- |
+| audio  | string | True | 'audio-sample-1' | html audio element ID |
+| canvas | string | True | 'canvas-1' | html canvas element ID |
+| autoplay | string | Boolean | False | auto start visualizer (functionality varies depending on browser policy) |
+| loop | Boolean | false | false | toggle looping |
+| style | String | false | 'lounge' | pick the visualizer type. currently only one type named 'lounge' | 
+| radius | Interger | false | canvas width / 2 | sets radius of the visualizer |
+| circumferenceSlice | Float | false | 0.0 | determines what chunk of the bars you want to be removed. 0 to show all 1 to show none. |
+| barWidth | Integer | false | 2 | sets width of bars |
+| barHeight| Integer | false | 2 | sets height of bars |
+| barSpacing | Integer | false | 5 | sets spacing between bars |
+| barColor | String | false | '#fff' | sets color of bars |
+| shadowBlur | String | false | 10 | sets shadow blur of bars |
+| shadowColor | String | false | '#fff' | sets shadow color of bars |
+| font | Array | false | ['12px', 'helvetica'] | sets font of text | 
 
-````
-    Audio element's ID selector.
-````
-
-**canvas** (String) (required)
-
-````
-    Canvas element's ID selector.
-````
-
-**autoplay** (Boolean)
-
-````
-    Auto-start visualizer.
-````
-
-**loop** (Boolean)
-
-````
-    Sets visualizer auto-replay option.
-````
-
-**style** (Boolean)
-
-````
-    Sets canvas rendering visualization style. Currently only 'lounge' style is supported.
-````
-
-**barWidth** (Integer)
-
-````
-    Sets bar's width in pixels.
-````
-
-**barHeight** (Integer)
-
-````
-    Sets initial bar's height in pixels (when there's no visualization).
-````
-
-**barSpacing** (Integer)
-
-````
-    Sets spacing between bars in pixels.
-````
-
-**barColor** (String) - '#cafdff'
-
-````
-    Sets HEX value as bar's color.
-````
-
-**shadowBlur** (Integer)
-
-````
-    Sets value as bar's shadow blur.
-````
-
-**shadowColor** (String) - '#ffffff'
-
-````
-    Sets HEX value as bar's shadow color.
-````
-
-**font** (Array) - ['12px', 'Helvetica']
-
-````
-    Sets font size and font type.
-````
 
 #### CSS Styles
-Style by your own preference or you can use my styles.
+Style by your own preference or you can use these defaults.
 
 ````html
 <div class="vz-wrapper">
